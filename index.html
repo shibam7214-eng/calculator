@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Full Scientific Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #1e1e1e;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      flex-direction: column;
+    }
+
+    .calculator {
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+    }
+
+    #display {
+      width: 100%;
+      height: 60px;
+      font-size: 24px;
+      text-align: right;
+      border: none;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #111;
+      color: #0f0;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      padding: 18px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: #3a3a3a;
+      color: white;
+      transition: 0.2s ease;
+    }
+
+    button:active {
+      background-color: #555;
+      transform: scale(0.95);
+    }
+
+    .equal { background-color: #28a745; }
+    .equal:active { background-color: #1e7e34; }
+    .clear { background-color: #dc3545; }
+    .clear:active { background-color: #c82333; }
+    .memory { background-color: #6c757d; }
+
+    #history {
+      max-width: 420px;
+      width: 100%;
+      margin-top: 20px;
+      background: #111;
+      color: #ccc;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      height: 100px;
+      overflow-y: auto;
+    }
+
+    .theme-toggle {
+      margin-top: 20px;
+      background: #444;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <input type="text" id="display" readonly placeholder="0" />
+    <div class="buttons">
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button onclick="append('/')">÷</button>
+      <button onclick="append('Math.sqrt(')">√</button>
+
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button onclick="append('*')">×</button>
+      <button onclick="append('Math.pow(')">xʸ</button>
+
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button onclick="append('-')">−</button>
+      <button onclick="append('Math.log10(')">log</button>
+
+      <button onclick="append('0')">0</button>
+      <button onclick="append('.')">.</button>
+      <button onclick="calculate()" class="equal">=</button>
+      <button onclick="append('+')">+</button>
+      <button onclick="clearDisplay()" class="clear">C</button>
+
+      <button onclick="append('Math.sin(')">sin</button>
+      <button onclick="append('Math.cos(')">cos</button>
+      <button onclick="append('Math.tan(')">tan</button>
+      <button onclick="append('Math.PI')">π</button>
+      <button onclick="append('Math.E')">e</button>
+
+      <button onclick="memoryAdd()" class="memory">M+</button>
+      <button onclick="memorySubtract()" class="memory">M−</button>
+      <button onclick="memoryRecall()" class="memory">MR</button>
+      <button onclick="memoryClear()" class="memory">MC</button>
+      <button onclick="backspace()">←</button>
+    </div>
+  </div>
+
+  <div id="history"></div>
+
+  <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+
+  <script>
+    let memory = 0;
+    let isDark = true;
+
+    function append(val) {
+      document.getElementById('display').value += val;
+    }
+
+    function clearDisplay() {
+      document.getElementById('display').value = "";
+    }
+
+    function backspace() {
+      let disp = document.getElementById('display');
+      disp.value = disp.value.slice(0, -1);
+    }
+
+    function calculate() {
+      const display = document.getElementById('display');
+      const history = document.getElementById('history');
+      try {
+        const result = eval(display.value);
+        history.innerHTML += `<div>${display.value} = <b>${result}</b></div>`;
+        display.value = result;
+      } catch {
+        display.value = "Error";
+      }
+    }
+
+    function memoryAdd() {
+      memory += parseFloat(document.getElementById('display').value || 0);
+    }
+
+    function memorySubtract() {
+      memory -= parseFloat(document.getElementById('display').value || 0);
+    }
+
+    function memoryRecall() {
+      document.getElementById('display').value += memory;
+    }
+
+    function memoryClear() {
+      memory = 0;
+    }
+
+    function toggleTheme() {
+      isDark = !isDark;
+      document.body.style.background = isDark ? '#1e1e1e' : '#f1f1f1';
+      document.body.style.color = isDark ? '#fff' : '#000';
+    }
+  </script>
+
+</body>
+</html>
